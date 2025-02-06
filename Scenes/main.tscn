@@ -1,19 +1,55 @@
-[gd_scene load_steps=4 format=3 uid="uid://sh6bimdsiq4n"]
+[gd_scene load_steps=8 format=3 uid="uid://sh6bimdsiq4n"]
 
 [ext_resource type="Script" path="res://Scripts/card_manager.gd" id="1_t6gh8"]
-[ext_resource type="PackedScene" uid="uid://djih8if3egxep" path="res://Scenes/card.tscn" id="2_5735l"]
 [ext_resource type="PackedScene" uid="uid://c6bphkxb7s6qc" path="res://Scenes/card_slot.tscn" id="3_kclhl"]
+[ext_resource type="Script" path="res://Scripts/player_hand.gd" id="3_pd0j5"]
+[ext_resource type="Texture2D" uid="uid://s2kg358omjkw" path="res://Assets/GameBoard/Deck.png" id="4_4n7rp"]
+[ext_resource type="Script" path="res://Scripts/deck.gd" id="4_72drn"]
+[ext_resource type="Script" path="res://Scripts/input_manager.gd" id="6_qbjuh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p4fo3"]
+size = Vector2(180, 266)
 
 [node name="Main" type="Node2D"]
 
 [node name="CardManager" type="Node2D" parent="."]
 script = ExtResource("1_t6gh8")
 
-[node name="Card" parent="CardManager" instance=ExtResource("2_5735l")]
-position = Vector2(437, 282)
-
-[node name="Card2" parent="CardManager" instance=ExtResource("2_5735l")]
-position = Vector2(844, 283)
-
 [node name="CardSlot" parent="." instance=ExtResource("3_kclhl")]
 position = Vector2(174, 204)
+
+[node name="CardSlot2" parent="." instance=ExtResource("3_kclhl")]
+position = Vector2(372, 204)
+
+[node name="PlayerHand" type="Node2D" parent="."]
+script = ExtResource("3_pd0j5")
+
+[node name="Deck" type="Node2D" parent="."]
+z_index = -2
+position = Vector2(150, 890)
+script = ExtResource("4_72drn")
+
+[node name="Sprite2D" type="Sprite2D" parent="Deck"]
+z_index = -2
+texture = ExtResource("4_4n7rp")
+
+[node name="Area2D" type="Area2D" parent="Deck"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Deck/Area2D"]
+z_index = -2
+shape = SubResource("RectangleShape2D_p4fo3")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Deck"]
+modulate = Color(0, 0, 0, 1)
+z_index = -2
+offset_left = -9.0
+offset_top = -28.0
+offset_right = 31.0
+offset_bottom = 12.0
+scale = Vector2(2, 2)
+text = "0"
+
+[node name="InputManager" type="Node2D" parent="."]
+script = ExtResource("6_qbjuh")

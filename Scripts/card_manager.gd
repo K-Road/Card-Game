@@ -1,13 +1,18 @@
 extends Node2D
 const COLLISON_MASK_CARD = 1
 const COLLISON_MASK_CARD_SLOT = 2
+const DEFAULT_CARD_MOVE_SPEED = 0.1
 
 var card_being_dragged
 var screen_size
 var is_hovering_on_card
+var player_hand_reference
+
 
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
+	player_hand_reference = $"../PlayerHand"
+	$"../InputManager".connect("left_mouse_button_released", on_left_click_released)
 
 func _process(delta: float) -> void:
 	if card_being_dragged:
@@ -16,18 +21,6 @@ func _process(delta: float) -> void:
 		print(card_being_dragged.position)
 		card_being_dragged.position = Vector2(clamp(mouse_pos.x, 0, screen_size.x),clamp(mouse_pos.y,0,screen_size.y))
 		
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			print("Left Click")
-			var card = raycast_check_for_card()
-			if card:
-				start_drag(card)
-		else:
-			if card_being_dragged:
-				stop_drag()
-				print("Release Left")
 			
 func start_drag(card):
 	card_being_dragged = card
@@ -37,12 +30,19 @@ func stop_drag():
 	card_being_dragged.scale = Vector2(1.05,1.05)
 	var card_slot_found = raycast_check_for_card_slot()
 	if card_slot_found and not card_slot_found.card_in_slot:
+		player_hand_reference.remove_card_from_hand(card_being_dragged)
 		#card dropped in empty slot
 		card_being_dragged.position = card_slot_found.position
 		card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
 		card_slot_found.card_in_slot = true
+	else:
+		player_hand_reference.add_card_to_hand(card_being_dragged, DEFAULT_CARD_MOVE_SPEED)
 	card_being_dragged = null
 	
+func on_left_click_released():
+	print("Card manager Left released")
+	if card_being_dragged:
+		stop_drag()
 			
 func connect_card_signals(card):
 	card.connect("hovered", on_hovered_card)
