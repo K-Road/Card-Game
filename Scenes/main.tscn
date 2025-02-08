@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://sh6bimdsiq4n"]
 
-[ext_resource type="Script" path="res://Scripts/card_manager.gd" id="1_t6gh8"]
+[ext_resource type="Script" path="res://Scripts/CardManager.gd" id="1_t6gh8"]
 [ext_resource type="PackedScene" uid="uid://c6bphkxb7s6qc" path="res://Scenes/card_slot.tscn" id="3_kclhl"]
-[ext_resource type="Script" path="res://Scripts/player_hand.gd" id="3_pd0j5"]
-[ext_resource type="Texture2D" uid="uid://s2kg358omjkw" path="res://Assets/GameBoard/Deck.png" id="4_4n7rp"]
-[ext_resource type="Script" path="res://Scripts/deck.gd" id="4_72drn"]
-[ext_resource type="Script" path="res://Scripts/input_manager.gd" id="6_qbjuh"]
+[ext_resource type="Script" path="res://Scripts/PlayerHand.gd" id="3_pd0j5"]
+[ext_resource type="Texture2D" uid="uid://b1bm4klbdli71" path="res://Assets/GameBoard/Deck.png" id="4_4n7rp"]
+[ext_resource type="Script" path="res://Scripts/Deck.gd" id="4_72drn"]
+[ext_resource type="Script" path="res://Scripts/InputManager.gd" id="6_qbjuh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4fo3"]
 size = Vector2(180, 266)

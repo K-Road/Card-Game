@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e4a4w0caklnc"
-path="res://.godot/imported/knight.png-6aebcedbb42b4521f59902af7b4643a3.ctex"
+uid="uid://btlgp4mpsbeqd"
+path="res://.godot/imported/Archer_Card.png-d1a6f746974406c4ebdaf3f69716e5a3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Cards/knight.png"
-dest_files=["res://.godot/imported/knight.png-6aebcedbb42b4521f59902af7b4643a3.ctex"]
+source_file="res://Assets/Cards/Archer_Card.png"
+dest_files=["res://.godot/imported/Archer_Card.png-d1a6f746974406c4ebdaf3f69716e5a3.ctex"]
 
 [params]
 
