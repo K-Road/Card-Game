@@ -2,11 +2,18 @@ extends Node2D
 const COLLISON_MASK_CARD = 1
 const COLLISON_MASK_CARD_SLOT = 2
 const DEFAULT_CARD_MOVE_SPEED = 0.1
+const DEFAULT_CARD_SCALE = 0.8
+const DEFAULT_CARD_SCALE_UP = 0.85
+const DEFAULT_CARD_SLOT_SCALE = 0.6
 
 var card_being_dragged
 var screen_size
 var is_hovering_on_card
 var player_hand_reference
+
+#play limits
+var played_monster_card = false
+
 
 
 func _ready() -> void:
@@ -24,20 +31,27 @@ func _process(delta: float) -> void:
 			
 func start_drag(card):
 	card_being_dragged = card
-	card.scale = Vector2(1,1)
+	card.scale = Vector2(DEFAULT_CARD_SCALE,DEFAULT_CARD_SCALE)
 	
 func stop_drag():
-	card_being_dragged.scale = Vector2(1.05,1.05)
+	card_being_dragged.scale = Vector2(DEFAULT_CARD_SCALE_UP,DEFAULT_CARD_SCALE_UP)
 	var card_slot_found = raycast_check_for_card_slot()
 	if card_slot_found and not card_slot_found.card_in_slot:
-		player_hand_reference.remove_card_from_hand(card_being_dragged)
-		#card dropped in empty slot
-		card_being_dragged.position = card_slot_found.position
-		card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
-		card_slot_found.card_in_slot = true
-	else:
-		player_hand_reference.add_card_to_hand(card_being_dragged, DEFAULT_CARD_MOVE_SPEED)
-	card_being_dragged = null
+		if card_being_dragged.card_type == card_slot_found.card_slot_type:
+			if !played_monster_card:
+				#card dropped in empty slot
+				card_being_dragged.scale = Vector2(DEFAULT_CARD_SLOT_SCALE,DEFAULT_CARD_SLOT_SCALE)
+				card_being_dragged.z_index = -1
+				is_hovering_on_card = false
+				card_being_dragged.card_slot_position = card_slot_found
+				player_hand_reference.remove_card_from_hand(card_being_dragged)
+				
+				card_being_dragged.position = card_slot_found.position
+				card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
+				card_slot_found.card_in_slot = true
+		else:
+			player_hand_reference.add_card_to_hand(card_being_dragged, DEFAULT_CARD_MOVE_SPEED)
+		card_being_dragged = null
 	
 func on_left_click_released():
 	print("Card manager Left released")
@@ -54,20 +68,21 @@ func on_hovered_card(card):
 		highlight_card(card,true)
 	
 func on_hovered_off_card(card):
-	if !card_being_dragged:
-		highlight_card(card,false)
-		var new_card_hovered = raycast_check_for_card()
-		if new_card_hovered:
-			highlight_card(new_card_hovered,true)
-		else:
-			is_hovering_on_card = false
+	if !card.card_slot_position:
+		if !card_being_dragged:
+			highlight_card(card,false)
+			var new_card_hovered = raycast_check_for_card()
+			if new_card_hovered:
+				highlight_card(new_card_hovered,true)
+			else:
+				is_hovering_on_card = false
 	
 func highlight_card(card, hovered):
 	if hovered:
-		card.scale = Vector2(1.05,1.05)
+		card.scale = Vector2(DEFAULT_CARD_SCALE_UP,DEFAULT_CARD_SCALE_UP)
 		card.z_index = 2
 	else:
-		card.scale = Vector2(1,1)
+		card.scale = Vector2(DEFAULT_CARD_SCALE,DEFAULT_CARD_SCALE)
 		card.z_index = 1
 			
 func raycast_check_for_card():
